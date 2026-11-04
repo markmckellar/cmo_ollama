@@ -1,5 +1,7 @@
 # cmo_ollama
 
+> Part of the [Private AI home camera system](https://github.com/markmckellar/cmo): this repo is the AI step. The other parts: [cmo_client](https://github.com/markmckellar/cmo_client) · [cmo_server](https://github.com/markmckellar/cmo_server) · [cmo_vue_client](https://github.com/markmckellar/cmo_vue_client).
+
 Bash scripts for asking [ollama](https://ollama.com) vision models questions about
 still images and security-camera movie clips from the cmo cat cam (the pet door
 camera). The main job is answering "is there a person / cat / dog / raccoon /
