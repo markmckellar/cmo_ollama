@@ -411,7 +411,7 @@ images and clips; only the scoring needs the labels.
 | `cmo_test_data/raccoon.mp4`, `raccoon_01..04.mp4`, `raccoons/` | Raccoon clips |
 | `cmo_test_data/cat.mp4` | Cat clip |
 | `cmo_test_data/empty.mp4` | A clip with nothing in it, for checking false positives |
-| `cmo_test_data/labeled/` | 139 hand-labeled clips from both cameras and `labels.tsv` (see its README) |
+| `cmo_test_data/labeled/` | 140 hand-labeled clips from both cameras and `labels.tsv` (see its README) |
 | `cmo_test_data/cat.jpg`, `person.jpg` | Pet door stills: a cat, and a person walking past |
 | `model_outputs/` | Raw ollama response from the last call to each model (here, gitignored) |
 
