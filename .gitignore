@@ -1,0 +1,16 @@
+HELP.md
+local/
+ollama_env_props.bash
+model_outputs/*
+!model_outputs/.gitkeep
+test_images/*
+!test_images/.gitkeep
+test_movies/*
+!test_movies/.gitkeep
+temp
+other_test_data
+scratch.txt
+__pycache__/
+7b_out/
+notes.txt
+test_data/
