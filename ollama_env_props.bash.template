@@ -3,8 +3,8 @@
 # question, so they classify alike. Copy this to ollama_env_props.bash (not tracked by git) only if this
 # machine must differ, and set just what differs. It is sourced at the end of ollama_common.bash.
 #
-# For example, a test machine with its own Ollama:
-# api="http://localhost:11434"
+# For example, a camera on a machine without the GPU (Ollama runs on the desktop):
+# api="http://<gpu-desktop>:11434"
 #
 # or the private test clips checked out somewhere other than next to this repo:
 # cmo_test_data="/data/cmo_test_data"
@@ -13,4 +13,4 @@
 # cmo_reader_key_file="$HOME/.secrets/cmo_reader_key"
 #
 # or a test cmo_server for both cameras on this machine:
-# cmo_server="http://192.168.1.167:9090/"
+# cmo_server="http://<home-server>:9090/"

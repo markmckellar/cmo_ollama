@@ -21,7 +21,7 @@
 # pauses between requests and backs off when the server stops answering.
 #
 # Optional settings (environment):
-#   catcam_server   server URL (default http://173.255.215.223:9090)
+#   catcam_server   server URL (default https://cmoserver01.mckcode.com; needs a reader key, see ollama_common.bash)
 #   catcam_pause    seconds to wait after every request (default 1)
 #   catcam_labels   labels to fetch (default "legs person cat dog raccoon")
 #   catcam_skip     a file of clips to leave out; any event whose me_name appears in
@@ -30,7 +30,7 @@
 script_path="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # Shared settings (and this machine's ollama_env_props.bash): where cmo_test_data is.
 source "$script_path/ollama_common.bash"
-server=${catcam_server:-http://173.255.215.223:9090}
+server=${catcam_server:-https://cmoserver01.mckcode.com}
 cmo_curl_auth "$server"    # the reader key, for a server that needs one (see ollama_common.bash)
 pause=${catcam_pause:-1}
 labels=${catcam_labels:-legs person cat dog raccoon}

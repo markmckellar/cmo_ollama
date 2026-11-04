@@ -9,7 +9,7 @@ model=$1
 prompt=$2
 file=$3
 stream="false"
-api="http://173.255.215.223:9090"
+api="${catcam_server:-https://cmoserver01.mckcode.com}"
 # shared settings: the reader key for servers that need one (cmo_curl_auth)
 source "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/ollama_common.bash"
 cmo_curl_auth "$api"
@@ -33,7 +33,7 @@ for meGroup in "${meGroupList[@]}"; do
   for meEvent in "${meEventList[@]}"; do
       echo "     Current element : meGroup=$meGroup meEventGroup=$meEventGroup meEvent=$meEvent"
       
-      me_rep_image_url="http://173.255.215.223:9090/catcam/data/$meGroup/$meEventGroup/$meEvent/me_rep_image.jpg"
+      me_rep_image_url="$api/catcam/data/$meGroup/$meEventGroup/$meEvent/me_rep_image.jpg"
       echo "          me_rep_image_url=$me_rep_image_url"
       # ./call_ollama.bash "qwen2.5vl:7b" "What animal is in this picture?" "$me_rep_image_url"
       test_image="test_images/rep_images/$meEvent.jpg"
@@ -42,7 +42,7 @@ for meGroup in "${meGroupList[@]}"; do
         curl -s "${cmo_auth[@]}" -o "$test_image" --location "$me_rep_image_url"
       fi
       
-      me_movie_url="http://173.255.215.223:9090/catcam/data/$meGroup/$meEventGroup/$meEvent/me_movie.mp4"
+      me_movie_url="$api/catcam/data/$meGroup/$meEventGroup/$meEvent/me_movie.mp4"
       echo "          me_movie_url=$me_movie_url"
       test_movie="test_movies/$meEvent.mp4"
       if [ ! -f "$test_movie" ]; then

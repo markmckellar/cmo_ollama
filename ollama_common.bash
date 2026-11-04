@@ -12,13 +12,14 @@
 
 ollama_common_dir="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 
-# Where ollama is running. 192.168.1.167 is the desktop with the GPU.
-api=${api:-"http://192.168.1.167:11434"}
+# Where ollama is running: this machine by default (the desktop with the GPU). A camera on another machine
+# sets its address in its ollama_env_props.bash, e.g. api="http://<gpu-desktop>:11434".
+api=${api:-"http://localhost:11434"}
 
 # The cmo_server the cameras upload their events to, and that their Telegram links point at. Both cameras
 # use this unless told otherwise, so in any one setup (production, or a test server) they always go to
 # the same server: for a test, set cmo_server in that machine's ollama_env_props.bash (or the environment).
-cmo_server=${cmo_server:-"http://173.255.215.223:9090/"}
+cmo_server=${cmo_server:-"https://cmoserver01.mckcode.com/"}
 
 # The test clips and hand labels live in their own private repo, cmo_test_data (they show real people and
 # places), checked out next to this one by default: ~/dev/cmo_test_data beside ~/dev/cmo_ollama.

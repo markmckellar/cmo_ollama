@@ -210,7 +210,7 @@ variable for a single run.
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `api` | `http://192.168.1.167:11434` | ollama base URL |
+| `api` | `http://localhost:11434` | ollama base URL (a camera on another machine sets the GPU desktop's address in its `ollama_env_props.bash`) |
 | `cmo_test_data` | `../cmo_test_data` (next to this repo) | Where the private test clips and hand labels are; used by `score_models.py` and `get_label_samples.bash` |
 | `quiet` | `true` | Set to `false` to turn on log messages. Can be set per run: `quiet=false ./call_ollama.bash ...` |
 | `ollama_log_file` | `~/logs/call_ollama.log` | Where log messages go (`CMO_LOG_DIR` moves it). Set `/dev/stderr` to see them in the terminal |
@@ -261,7 +261,7 @@ Every Ollama call's numbers are kept in three places:
 
 # An image URL from the cat cam
 ./call_ollama.bash "qwen2.5vl:3b" "What animal is in this picture?" \
-  "http://173.255.215.223:9090/catcam/data/pet_door/20250810/20250810_004012_0136/me_rep_image.jpg"
+  "https://your-server/catcam/data/pet_door/20250810/20250810_004012_0136/me_rep_image.jpg"
 
 # The standard person/animal question
 ./call_ollama.bash "qwen3-vl:8b" "person_animal_question" test_images/rep_images/20250714_204635_2041.jpg
