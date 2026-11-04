@@ -211,6 +211,7 @@ variable for a single run.
 | Variable | Default | Meaning |
 | --- | --- | --- |
 | `api` | `http://192.168.1.167:11434` | ollama base URL |
+| `cmo_test_data` | `../cmo_test_data` (next to this repo) | Where the private test clips and hand labels are; used by `score_models.py` and `get_label_samples.bash` |
 | `quiet` | `true` | Set to `false` to turn on log messages. Can be set per run: `quiet=false ./call_ollama.bash ...` |
 | `ollama_log_file` | `~/logs/call_ollama.log` | Where log messages go (`CMO_LOG_DIR` moves it). Set `/dev/stderr` to see them in the terminal |
 | `ollama_log_tag` | `OLLAMA_LOG cmo_ollama:<version>` | Tag on every log line |

@@ -6,5 +6,8 @@
 # For example, a test machine with its own Ollama:
 # api="http://localhost:11434"
 #
+# or the private test clips checked out somewhere other than next to this repo:
+# cmo_test_data="/data/cmo_test_data"
+#
 # or a test cmo_server for both cameras on this machine:
 # cmo_server="http://192.168.1.167:9090/"

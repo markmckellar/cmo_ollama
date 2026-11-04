@@ -28,6 +28,8 @@
 #                   it is skipped (e.g. ../cmo_test_data/labeled/labels.tsv)
 
 script_path="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+# Shared settings (and this machine's ollama_env_props.bash): where cmo_test_data is.
+source "$script_path/ollama_common.bash"
 server=${catcam_server:-http://173.255.215.223:9090}
 pause=${catcam_pause:-1}
 labels=${catcam_labels:-legs person cat dog raccoon}
@@ -98,7 +100,7 @@ for label in $labels; do
   done
 done
 
-empty_clip="${cmo_test_data:-$(dirname "$script_path")/cmo_test_data}/empty.mp4"
+empty_clip="$cmo_test_data/empty.mp4"
 if [ -s "$empty_clip" ] && ! grep -q "^empty"$'\t' "$manifest"; then
   printf "%s\t%s\t%s\t%s\n" empty none '{}' "$empty_clip" >> "$manifest"
 fi

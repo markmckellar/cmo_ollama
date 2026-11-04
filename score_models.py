@@ -19,9 +19,27 @@ import os
 import sys
 
 FIELDS = ["legs", "person", "cat", "dog", "raccoon", "animal"]
-# The hand labels are in the private cmo_test_data repo, next to this one unless $cmo_test_data says otherwise.
-TEST_DATA = os.environ.get("cmo_test_data") or os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "cmo_test_data")
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def test_data_dir():
+    """Where the private cmo_test_data repo is: $cmo_test_data, else what ollama_common.bash works out
+    (its default, or this machine's ollama_env_props.bash), else next to this repo."""
+    if os.environ.get("cmo_test_data"):
+        return os.environ["cmo_test_data"]
+    try:
+        import subprocess
+        out = subprocess.run(["bash", "-c", 'source "$1" >/dev/null 2>&1; printf %s "$cmo_test_data"', "_",
+                              os.path.join(HERE, "ollama_common.bash")],
+                             capture_output=True, text=True, timeout=30).stdout
+        if out:
+            return out
+    except (OSError, subprocess.SubprocessError):
+        pass
+    return os.path.join(os.path.dirname(HERE), "cmo_test_data")
+
+
+TEST_DATA = test_data_dir()
 LABELS = os.path.join(TEST_DATA, "labeled", "labels.tsv")
 
 
