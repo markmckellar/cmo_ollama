@@ -25,7 +25,7 @@ cmo_server=${cmo_server:-"https://cmoserver01.mckcode.com/"}
 # places), checked out next to this one by default: ~/dev/cmo_test_data beside ~/dev/cmo_ollama.
 cmo_test_data=${cmo_test_data:-"$(dirname "$ollama_common_dir")/cmo_test_data"}
 
-# Scripts that download events from cmo_server (get_com_data.bash, get_label_samples.bash) send a "reader"
+# Scripts that download events from cmo_server (get_label_samples.bash) send a "reader"
 # device key, so a server in google mode lets them view this account's cameras. CMO_KEY=... in a mode-600
 # file, never in git (cmo_server's new_device_key.bash makes one). A camera's own key can't view, so this is
 # a separate key. No file: no key (a server in open mode at home doesn't need one).

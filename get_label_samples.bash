@@ -9,7 +9,7 @@
 # 10) whose me_ollama.json has that label true, spread over the dates on the
 # server. cmo_test_data/empty.mp4 is added as a "none" clip, since the server has
 # no events where every label is false. Movies go to <out_dir>/<me_name>.mp4
-# (default test_movies/samples) and <out_dir>/manifest.tsv lists one line per
+# (default $cmo_test_data/new_samples) and <out_dir>/manifest.tsv lists one line per
 # movie:
 #   me_name  sample_label  server_labels(json)  movie_path
 # Rerunning tops up the manifest instead of starting over.
@@ -37,7 +37,7 @@ labels=${catcam_labels:-legs person cat dog raccoon}
 skip_file=${catcam_skip:-}
 group="pet_door"
 per_label=${1:-10}
-out_dir=${2:-test_movies/samples}
+out_dir=${2:-"$cmo_test_data/new_samples"}
 
 mkdir -p "$out_dir"
 manifest="$out_dir/manifest.tsv"

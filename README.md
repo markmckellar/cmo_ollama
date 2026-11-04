@@ -80,7 +80,7 @@ ollama pull qwen3-vl:8b
 4. Try a single image:
 
    ```bash
-   ./call_ollama.bash "qwen2.5vl:7b" "What animal is in this picture?" test_images/rep_images/20250714_204635_2041.jpg
+   ./call_ollama.bash "qwen2.5vl:7b" "What animal is in this picture?" ../cmo_test_data/cat.jpg
    ```
 
 ## The scripts
@@ -91,7 +91,7 @@ ollama pull qwen3-vl:8b
 | `call_ollama_movie.bash` | Picks representative frames from an mp4 and asks a question about them through `call_ollama.bash`. |
 | `compare_modes.bash` | Runs `call_ollama_movie.bash` in grid and frames mode over a set of movies and prints a table of tokens, seconds and answers. |
 | `time_models.bash` | Runs one question and image against every model on the server, unloading each model afterwards. |
-| `get_com_data.bash` | Downloads representative images and movies from the cat cam server into `test_images/rep_images/` and `test_movies/`. |
+| `get_label_samples.bash` | Downloads sample clips for each label from the cat cam server, gently, into `cmo_test_data/new_samples/` for hand labeling. |
 | `dark_or_light.bash` | Prints `light` or `dark` based on today's sunrise and sunset from wttr.in. |
 | `ollama_common.bash` | Settings and the `logMessage` function, the same on every machine. Sourced by the other scripts. |
 | `ollama_env_props.bash` | Optional, not in git: a machine's own differences, from `ollama_env_props.bash.template`. |
@@ -259,25 +259,25 @@ Every Ollama call's numbers are kept in three places:
 
 ```bash
 # A local file
-./call_ollama.bash "qwen2.5vl:7b" "What animal is in this picture?" test_images/rep_images/20250714_204635_2041.jpg
+./call_ollama.bash "qwen2.5vl:7b" "What animal is in this picture?" ../cmo_test_data/cat.jpg
 
 # An image URL from the cat cam
 ./call_ollama.bash "qwen2.5vl:3b" "What animal is in this picture?" \
   "https://your-server/catcam/data/pet_door/20250810/20250810_004012_0136/me_rep_image.jpg"
 
 # The standard person/animal question
-./call_ollama.bash "qwen3-vl:8b" "person_animal_question" test_images/rep_images/20250714_204635_2041.jpg
+./call_ollama.bash "qwen3-vl:8b" "person_animal_question" ../cmo_test_data/cat.jpg
 
 # Two images in one request
-./call_ollama.bash "qwen2.5vl:7b" "Is the same animal in both pictures?" \
-  test_images/rep_images/20250714_204635_2041.jpg \
-  test_images/rep_images/20250714_210515_2042.jpg
+./call_ollama.bash "qwen2.5vl:7b" "Is there a cat in both pictures?" \
+  ../cmo_test_data/cat.jpg \
+  ../cmo_test_data/person.jpg
 ```
 
 ### A cute sentence
 
 ```bash
-./cute_ollama.bash qwen3-vl:8b test_images/rep_images/20250714_204635_2041.jpg
+./cute_ollama.bash qwen3-vl:8b ../cmo_test_data/cat.jpg
 # {"text":"A tabby cat is sitting by the door, looking in."}
 ```
 
@@ -317,8 +317,8 @@ fi
 ### Batch runs
 
 ```bash
-# Every clip in test_movies, print the file name and answer
-for movie in test_movies/*.mp4; do
+# Every hand-labeled cat clip, print the file name and answer
+for movie in ../cmo_test_data/labeled/cat/*.mp4; do
   echo "$movie $(./call_ollama_movie.bash "qwen2.5vl:7b" "person_animal_question" "$movie")"
 done
 
@@ -358,7 +358,7 @@ jq -s 'map(.total_seconds) | add / length' stats.jsonl   # average seconds per c
 
 # Every model on the server with the same image (slow; each model is loaded and unloaded)
 ./time_models.bash "List all the humans or animals in the picture as a comma separated list." \
-  test_images/rep_images/20250714_204635_2041.jpg
+  ../cmo_test_data/cat.jpg
 ```
 
 ### Other
@@ -367,8 +367,9 @@ jq -s 'map(.total_seconds) | add / length' stats.jsonl   # average seconds per c
 # Is it day or night where this machine is?
 ./dark_or_light.bash
 
-# Download new test images and movies from the cat cam server
-./get_com_data.bash
+# Download 10 new clips per label from the cat cam server into ../cmo_test_data/new_samples,
+# skipping ones already labeled; label them by hand, then move them into labeled/
+catcam_skip=../cmo_test_data/labeled/labels.tsv ./get_label_samples.bash 10
 ```
 
 ## Used by the cameras
@@ -411,8 +412,7 @@ images and clips; only the scoring needs the labels.
 | `cmo_test_data/cat.mp4` | Cat clip |
 | `cmo_test_data/empty.mp4` | A clip with nothing in it, for checking false positives |
 | `cmo_test_data/labeled/` | 139 hand-labeled clips from both cameras and `labels.tsv` (see its README) |
-| `test_images/rep_images/` | Representative stills from the cat cam (here, gitignored, filled by `get_com_data.bash`) |
-| `test_movies/` | Cat cam clips (here, gitignored, filled by `get_com_data.bash`) |
+| `cmo_test_data/cat.jpg`, `person.jpg` | Pet door stills: a cat, and a person walking past |
 | `model_outputs/` | Raw ollama response from the last call to each model (here, gitignored) |
 
 Score a setting on the labeled clips by making a manifest from `labels.tsv` (me_name, category,
