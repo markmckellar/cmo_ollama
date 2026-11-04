@@ -24,6 +24,26 @@ cmo_server=${cmo_server:-"http://173.255.215.223:9090/"}
 # places), checked out next to this one by default: ~/dev/cmo_test_data beside ~/dev/cmo_ollama.
 cmo_test_data=${cmo_test_data:-"$(dirname "$ollama_common_dir")/cmo_test_data"}
 
+# Scripts that download events from cmo_server (get_com_data.bash, get_label_samples.bash) send a "reader"
+# device key, so a server in google mode lets them view this account's cameras. CMO_KEY=... in a mode-600
+# file, never in git (cmo_server's new_device_key.bash makes one). A camera's own key can't view, so this is
+# a separate key. No file: no key (a server in open mode at home doesn't need one).
+cmo_reader_key_file=${cmo_reader_key_file:-"$HOME/.config/cmo/reader_key"}
+
+# cmo_curl_auth <url> : sets the array cmo_auth to curl's Authorization header for that server, or to nothing.
+# Like the cameras, the key is sent only over https or to this machine / the home network.
+cmo_curl_auth() {
+    cmo_auth=()
+    [ -r "$cmo_reader_key_file" ] || return 0
+    local key host
+    key=$(sed -n 's/^[[:space:]]*\(export[[:space:]]\+\)\?CMO_KEY[[:space:]]*=[[:space:]]*["'"'"']\?\([^"'"'"']*\)["'"'"']\?[[:space:]]*$/\2/p' "$cmo_reader_key_file" | head -1)
+    [ -n "$key" ] || return 0
+    host=$(printf '%s' "$1" | sed -E 's#^[a-zA-Z]+://\[?([^]/:]+).*#\1#')
+    if [[ "$1" == https://* || "$host" == localhost || "$host" =~ ^(127\.|10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[01])\.) ]]; then
+        cmo_auth=(-H "Authorization: Bearer $key")
+    fi
+}
+
 # This code's version, from its git tags (see release.bash): 1.3.0 on a release, 1.3.0+4 four commits
 # after it, 1.3.0+4.dirty with uncommitted changes too, unknown outside a git checkout. Worked out once
 # and exported, so the scripts this one starts don't run git again. It goes in every log line and in

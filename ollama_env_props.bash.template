@@ -9,5 +9,8 @@
 # or the private test clips checked out somewhere other than next to this repo:
 # cmo_test_data="/data/cmo_test_data"
 #
+# or the reader key for the download scripts somewhere other than ~/.config/cmo/reader_key:
+# cmo_reader_key_file="$HOME/.secrets/cmo_reader_key"
+#
 # or a test cmo_server for both cameras on this machine:
 # cmo_server="http://192.168.1.167:9090/"

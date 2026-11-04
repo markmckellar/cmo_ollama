@@ -31,6 +31,7 @@ script_path="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # Shared settings (and this machine's ollama_env_props.bash): where cmo_test_data is.
 source "$script_path/ollama_common.bash"
 server=${catcam_server:-http://173.255.215.223:9090}
+cmo_curl_auth "$server"    # the reader key, for a server that needs one (see ollama_common.bash)
 pause=${catcam_pause:-1}
 labels=${catcam_labels:-legs person cat dog raccoon}
 skip_file=${catcam_skip:-}
@@ -47,7 +48,7 @@ get() {
   local url=$1 wait=5 try
   shift
   for try in 1 2 3 4; do
-    if curl -sf -m 60 "$@" "$url"; then
+    if curl -sf -m 60 "${cmo_auth[@]}" "$@" "$url"; then
       sleep "$pause"
       return 0
     fi
