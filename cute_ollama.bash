@@ -3,11 +3,12 @@
 # Ask an ollama vision model for a short, cute sentence about a photo, to be said out loud (the
 # Google Home announcements).
 #
-# Usage: cute_ollama.bash <model> <image-or-url> [<question>]
+# Usage: cute_ollama.bash <model> <image-or-url> [<question> [<label>]]
 #
 # Prints {"text": "..."} on stdout, or {} and exits non-zero on failure (as call_ollama.bash does).
 # The photo is shrunk to at most cute_width pixels wide first, so it fits the 2048 token context.
-# The question defaults to cute_question in ollama_common.bash.
+# The question defaults to cute_question in ollama_common.bash (also when given as ""). Every {label}
+# in it becomes <label>: what the camera found, e.g. cat, raccoon or "cat and raccoon" (default animal).
 #
 # Optional settings (ollama_common.bash, or the environment for one run), besides call_ollama.bash's:
 #   cute_width          widest photo sent, in pixels (default 640: about 1200 prompt tokens)
@@ -18,13 +19,15 @@ script_path="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 source "$script_path/ollama_common.bash"
 
 if [ "$#" -lt 2 ]; then
-  echo "Usage: $0 <model> <image-or-url> [<question>]" >&2
+  echo "Usage: $0 <model> <image-or-url> [<question> [<label>]]" >&2
   exit 1
 fi
 
 model=$1
 image=$2
 question=${3:-$cute_question}
+label=${4:-animal}
+question=${question//\{label\}/$label}
 
 work_dir=$(mktemp -d)
 trap 'rm -rf "$work_dir"' EXIT

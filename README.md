@@ -34,7 +34,7 @@ animal in this clip?" as JSON so other scripts can act on it.
 | `jq` | everything | Builds the request JSON and parses the response |
 | `base64` (coreutils) | `call_ollama.bash` | Encodes the images for the request |
 | `ffmpeg`, `ffprobe` | `call_ollama_movie.bash` | Picks frames out of the clip and builds the grid image |
-| `cute_ollama.bash` | Asks for one short, cute sentence about a photo, to say out loud (`{"text": "..."}`). Shrinks the photo to 640 wide first (about 1,150 prompt tokens, 1.3 s). The question is `cute_question` in `ollama_common.bash`; from Python, `call_ollama.cute_text(image)`. Not used by the cameras yet. |
+| `cute_ollama.bash` | Asks for one short, cute sentence about a photo, to say out loud (`{"text": "..."}`). Shrinks the photo to 640 wide first (about 1,150 prompt tokens, 1.3 s). The question is `cute_question` in `ollama_common.bash` (a pet door on a porch; its `{label}` is the optional 4th argument, e.g. `cat`); from Python, `call_ollama.cute_text(image, label="cat")`. The pet door's Google Home announcements use it. |
 | `jo` | `time_models.bash` | Only used to unload each model after timing it |
 
 On Debian/Ubuntu/Raspberry Pi OS:
