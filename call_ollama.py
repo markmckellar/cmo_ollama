@@ -148,15 +148,20 @@ def classify_images(images, model=DEFAULT_MODEL, question=DEFAULT_QUESTION, time
     return None if answer is None else {k: answer.get(k) is True for k in LABELS}
 
 
-def cute_text(image, model=DEFAULT_MODEL, question="", timeout=60, stats=None, label="", context=""):
+def cute_text(image, model=DEFAULT_MODEL, question="", timeout=60, stats=None, label="", context="", info=None):
     """cute_ollama.bash on one photo: a short, cute sentence about it to say out loud, e.g. "A tabby cat is
     sitting by the door, looking in.", or None. question: empty = cute_question in ollama_common.bash.
     label: what the camera found, put in for the question's {label} (e.g. "cat"; empty = "animal").
     context: facts about right now for its {context} (e.g. "it is evening; it is dark outside").
+    info: a dict that gets "style", the random {style} used (e.g. "like a pirate"), and "cat", the name of
+    the cat it recognised from the context's list of cats who live here (or "").
     stats: as classify_movie."""
     args = [question, label, context] if context else [question, label] if label else [question] if question else []
     answer = _run([HERE / "cute_ollama.bash", model, image] + args, timeout, stats)
     text = answer and answer.get("text")
+    if info is not None and answer:
+        info["style"] = answer.get("style", "")
+        info["cat"] = (answer.get("cat") or "").strip()
     if not text:
         return None
     # no emoji or other pictographs: the sentence is spoken (a speaker may read out "paw prints")

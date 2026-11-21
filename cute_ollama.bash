@@ -5,7 +5,7 @@
 #
 # Usage: cute_ollama.bash <model> <image-or-url> [<question> [<label> [<context>]]]
 #
-# Prints {"text": "..."} on stdout, or {} and exits non-zero on failure (as call_ollama.bash does).
+# Prints {"text": "...", "style": "<the {style} used>", "cat": "<a name from the context, or empty>"} on stdout, or {} and exits non-zero on failure (as call_ollama.bash does).
 # The photo is shrunk to at most cute_width pixels wide first, so it fits the 2048 token context.
 # The question defaults to cute_question in ollama_common.bash (also when given as ""). Every {label}
 # in it becomes <label>: what the camera found, e.g. cat, raccoon or "cat and raccoon" (default animal).
@@ -60,4 +60,4 @@ response=$(ollama_temperature=${ollama_temperature:-0.7} ollama_seed=${ollama_se
   "$script_path/call_ollama.bash" "$model" "$question" "$small") || fail "call_ollama.bash failed"
 jq -e '.text | type == "string" and length > 0' <<< "$response" > /dev/null \
   || fail "no text in the answer : $response"
-jq -c '{text: .text}' <<< "$response"
+jq -c --arg style "$style" '{text: .text, style: $style, cat: ((.cat // "") | tostring)}' <<< "$response"
