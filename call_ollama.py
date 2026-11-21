@@ -15,6 +15,7 @@ ollama_common.bash (see README.md). Runs on Python 3.7 and newer.
 import json
 import logging
 import os
+import re
 import subprocess
 import tempfile
 import time
@@ -147,14 +148,20 @@ def classify_images(images, model=DEFAULT_MODEL, question=DEFAULT_QUESTION, time
     return None if answer is None else {k: answer.get(k) is True for k in LABELS}
 
 
-def cute_text(image, model=DEFAULT_MODEL, question="", timeout=60, stats=None, label=""):
+def cute_text(image, model=DEFAULT_MODEL, question="", timeout=60, stats=None, label="", context=""):
     """cute_ollama.bash on one photo: a short, cute sentence about it to say out loud, e.g. "A tabby cat is
     sitting by the door, looking in.", or None. question: empty = cute_question in ollama_common.bash.
     label: what the camera found, put in for the question's {label} (e.g. "cat"; empty = "animal").
+    context: facts about right now for its {context} (e.g. "it is evening; it is dark outside").
     stats: as classify_movie."""
-    args = [question, label] if label else [question] if question else []
+    args = [question, label, context] if context else [question, label] if label else [question] if question else []
     answer = _run([HERE / "cute_ollama.bash", model, image] + args, timeout, stats)
-    return None if answer is None else answer.get("text") or None
+    text = answer and answer.get("text")
+    if not text:
+        return None
+    # no emoji or other pictographs: the sentence is spoken (a speaker may read out "paw prints")
+    text = re.sub(r"[\U0001F000-\U0001FFFF\u2600-\u27BF\u2B00-\u2BFF\uFE0F\u200D]", "", text)
+    return re.sub(r"\s+([.,!?])", r"\1", re.sub(r"\s{2,}", " ", text)).strip() or None
 
 
 def pick_representative(images, labels, model=DEFAULT_MODEL, question=DEFAULT_QUESTION, stats=None):

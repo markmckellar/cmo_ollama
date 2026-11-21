@@ -87,7 +87,30 @@ cute_question_v1="This photo is from a camera at the door of a house. In one sho
 # ({label}: cute_ollama.bash fills in what the camera found, e.g. cat or raccoon), and keeps the
 # sentence to that animal and the pet door.
 cute_question_v2="This photo is from a camera watching a pet door on the porch of a house. A {label} has just been seen there, most likely coming in through the pet door, going out through it, or waiting by it. In one short, cute, playful sentence of at most 20 words, say what the {label} seems to be doing, as a friendly house would announce it out loud. Make it fun: you may mention the {label}'s pose or mood, but not its colour (night pictures change colours). Talk only about the {label} and the pet door; do not mention any other objects. Describe only what you can clearly see; do not guess names or invent things that are not visible. If you cannot tell whether it is coming in or going out, say it is waiting, in a playful way. Respond in JSON with exactly one key, text, whose value is the sentence."
-cute_question="$cute_question_v2"
+# v3 (2026-11-20): v2 said "waiting ... next adventure" nearly every time, so this one gets a random
+# {style} (cute_styles, picked by cute_ollama.bash) and {context}: facts about right now from the camera
+# (time of day, light, weather, holiday or season, the visits today), and describes the cat through them.
+cute_question_v3="This photo is from a camera watching a pet door on the porch of a house. A {label} has just been seen there, most likely coming in through the pet door, going out through it, or sitting by it. Facts about right now: {context}. In one short, cute, playful sentence of at most 20 words, describe the {label} given these facts, as a friendly house would say it out loud. Work in two or three of the facts that fit. Always tell what the {label} looks like, so the family can tell which one it is: its colour and markings (for example tabby, black, grey, black and white, white paws, striped tail); if the picture is black and white night vision, tell its markings instead of colours. Talk only about the {label}, the pet door and those facts; do not mention any other objects. Describe only what you can clearly see; do not give it a name and do not invent things that are not visible. Do not use the words waiting or adventure, and do not use emoji: the sentence is spoken. Say it {style}, so it clearly sounds that way. Respond in JSON with exactly one key, text, whose value is the sentence."
+# cute_ollama.bash picks one of these at random for {style}, so the sentences don't all sound the same.
+cute_styles=(
+  "like an excited sports commentator"
+  "like a nature documentary narrator"
+  "like a butler announcing a guest"
+  "as a short rhyme"
+  "with a gentle pun"
+  "like a royal herald"
+  "like a weather reporter"
+  "like a breaking news flash"
+  "like a pirate"
+  "like a cozy bedtime story"
+  "like an airport announcement"
+  "like a game show host"
+  "like a detective noting a clue"
+  "like a proud grandparent"
+  "like a spy reporting in"
+  "like a tour guide"
+)
+cute_question="$cute_question_v3"
 
 # Log messages go here when quiet=false (the cameras turn logging on for their calls). ~/logs is
 # where the cameras keep their logs too; CMO_LOG_DIR moves all of them. Set ollama_log_file=/dev/stderr
