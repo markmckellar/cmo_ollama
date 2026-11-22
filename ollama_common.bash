@@ -78,6 +78,19 @@ person_animal_question_v3="Look carefully at what is actually visible. Answer on
 # The question scripts get when they ask for person_animal_question. Both cameras use this one.
 person_animal_question="$person_animal_question_v2"
 
+# Porch delivery check (delivery.py, used by the porch camera since 2026-11-22). Asked only about a person event
+# near the door (peak_motion >= 0.05). The model lists what people hold; delivery.py calls it a package when an item
+# matches box|package|parcel|envelope|letter|mail|paper|bag (paper, plastic, shopping, grocery, food) or uniform is
+# true. It is asked twice: with call_ollama_movie.bash -n 8 -s motion -c, and with 8 frames cropped to the person
+# (6 from the first half of the visit, 2 from the second). Yes/no "is anyone carrying a package" questions said
+# true for almost everyone.
+delivery_question_v1="These pictures are frames, in time order, from a camera above the front door of a house, looking down at the porch, the path and the sidewalk. Answer only from what you can clearly see; do not guess. carrying: a list of the objects that people in the pictures hold in their hands or arms, each named in one or two plain words (for example: phone, cardboard box, envelope, letters, paper bag, plastic bag, shopping bag, backpack, purse, cup, leash, umbrella, keys, package). Use an empty list if no one holds anything or you cannot tell. uniform: true if a person wears a delivery uniform or vest (brown UPS uniform, blue Amazon vest, postal uniform, reflective safety vest). Respond in JSON with exactly these keys: carrying (a list of strings), uniform (true or false)."
+delivery_question="$delivery_question_v1"
+# delivery.py's person finder: asked about one frame at a time, the box around each person (0-1000), so it knows
+# when someone is in the clip and how big (how near the door) they are. Asked about a grid of 16 frames at once,
+# qwen3-vl:8b said "every frame" for almost any clip with a person.
+person_box_question="Find every person in this picture from a security camera, including people who are small, far away, partly hidden or dark. Respond in JSON with exactly one key, people, whose value is a list with one bbox_2d [x1, y1, x2, y2] (0-1000 scale) per person, or an empty list if there is no person."
+
 # cute_ollama.bash's question: a short, cute sentence about the picture, to be said on the Google Home
 # speakers (their messages are at most 200 characters), as JSON {"text": "..."}.
 # The original question: it said little about the scene, so it sometimes made things up ("the cat is

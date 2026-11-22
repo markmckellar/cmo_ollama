@@ -95,6 +95,7 @@ ollama pull qwen3-vl:8b
 | `dark_or_light.bash` | Prints `light` or `dark` based on today's sunrise and sunset from wttr.in. |
 | `ollama_common.bash` | Settings and the `logMessage` function, the same on every machine. Sourced by the other scripts. |
 | `ollama_env_props.bash` | Optional, not in git: a machine's own differences, from `ollama_env_props.bash.template`. |
+| `delivery.py` | Was a porch visit a delivery? A package or delivery uniform (`delivery_question`, asked about the motion frames and about frames cropped to the person) and a round trip up the path to the door and back (`person_box_question`, one frame at a time). The porch camera uses it; `delivery.py clip.mp4 [next_clip.mp4 ...]` checks clips by hand. |
 | `call_ollama.py` | Runs these scripts from Python. The cameras use it (see [Used by the cameras](#used-by-the-cameras)). |
 | `release.bash` | Tags a new version (see [Versions](#versions)). |
 
